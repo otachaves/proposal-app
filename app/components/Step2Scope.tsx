@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useApp } from "../store";
-import { ScopeData, Professional, CustomExpense, DEFAULT_PROFESSIONALS } from "../types";
+import { ScopeData, CustomExpense } from "../types";
 
 let expenseCounter = 0;
 const newExpenseId = () => `exp-${++expenseCounter}-${Date.now()}`;
@@ -148,7 +148,6 @@ export default function Step2Scope() {
   const selectedAdditionalPct = form.additionalServices
     .filter((s) => s.selected)
     .reduce((sum, s) => sum + s.percentage, 0);
-  const selectedProfessionals = form.professionals.filter((p) => p.selected);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
