@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #1A1A2E;
+  --navy: #0A1628;
+  --gold: #C9A84C;
+  --border: #E8E8E8;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Proposal print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .proposal-cover {
+    min-height: 100vh;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .proposal-section {
+    page-break-before: always;
+    break-before: page;
+  }
+}
