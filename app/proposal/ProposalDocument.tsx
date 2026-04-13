@@ -58,7 +58,7 @@ function PhotoFrame({
         src={src}
         alt={alt}
         fill
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "cover", objectPosition: "center top" }}
         onError={() => setErrored(true)}
       />
     </div>
