@@ -36,12 +36,20 @@ Be direct and professional. Reference the specific market when relevant. Avoid g
 
     const message = await client.messages.create({
       model: "claude-sonnet-5-5",
-      max_tokens: 300,
+      // Sonnet 5.5 always thinks first and that counts toward max_tokens,
+      // so keep the budget roomy and effort low for these short replies
+      max_tokens: 4000,
+      output_config: { effort: "low" },
       messages: [{ role: "user", content: prompt }],
     });
 
     const insight =
-      message.content[0].type === "text" ? message.content[0].text : "";
+      message.content.find((b) => b.type === "text")?.text ?? "";
+
+    if (!insight) {
+      console.error("AI insight error: empty reply, stop_reason =", message.stop_reason);
+      return NextResponse.json({ error: "Failed to generate insight" }, { status: 502 });
+    }
 
     return NextResponse.json({ insight });
   } catch (error) {

@@ -76,11 +76,14 @@ Rules:
 
     const message = await client.messages.create({
       model: "claude-sonnet-5-5",
-      max_tokens: 800,
+      // Sonnet 5.5 always thinks first and that counts toward max_tokens,
+      // so keep the budget roomy and effort low for these short replies
+      max_tokens: 4000,
+      output_config: { effort: "low" },
       messages: [{ role: "user", content: prompt }],
     });
 
-    const raw = message.content[0].type === "text" ? message.content[0].text : "{}";
+    const raw = message.content.find((b) => b.type === "text")?.text ?? "{}";
 
     // Parse JSON safely
     const jsonMatch = raw.match(/\{[\s\S]*\}/);

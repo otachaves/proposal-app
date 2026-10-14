@@ -30,12 +30,15 @@ Return ONLY the description text, no quotes, no preamble.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-5-5",
-      max_tokens: 200,
+      // Sonnet 5.5 always thinks first and that counts toward max_tokens,
+      // so keep the budget roomy and effort low for these short replies
+      max_tokens: 4000,
+      output_config: { effort: "low" },
       messages: [{ role: "user", content: prompt }],
     });
 
     const description =
-      message.content[0].type === "text" ? message.content[0].text.trim() : "";
+      (message.content.find((b) => b.type === "text")?.text ?? "").trim();
 
     return NextResponse.json({ description });
   } catch (error) {
