@@ -41,7 +41,7 @@ export default function FirmSetupPage() {
           </div>
           <div>
             <span className="font-bold text-gray-900 text-base block">Proposal App</span>
-            <span className="text-[10px] text-[#0066cc] font-semibold tracking-wider uppercase block">Archipelago Showcase</span>
+            <span className="text-[10px] text-[#0066cc] font-semibold tracking-wider uppercase block">SMAC Showcase</span>
           </div>
         </div>
 
