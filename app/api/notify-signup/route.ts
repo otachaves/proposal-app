@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
     if (!email) return NextResponse.json({ ok: false });
+
+    // Created per request so a missing key doesn't break the build
+    if (!process.env.RESEND_API_KEY) {
+      console.error("Notify signup error: RESEND_API_KEY is not set");
+      return NextResponse.json({ ok: false });
+    }
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const timestamp = new Date().toLocaleString("en-CA", {
       timeZone: "America/Vancouver",
