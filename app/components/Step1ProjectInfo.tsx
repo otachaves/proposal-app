@@ -9,6 +9,12 @@ export default function Step1ProjectInfo() {
   const [form, setForm] = useState<ProjectInfo>(projectInfo);
   const [errors, setErrors] = useState<Partial<Record<keyof ProjectInfo, string>>>({});
 
+  // Meeting notes AI
+  const [showNotes, setShowNotes] = useState(false);
+  const [notes, setNotes] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState("");
+
   const validate = () => {
     const newErrors: Partial<Record<keyof ProjectInfo, string>> = {};
     if (!form.clientName.trim()) newErrors.clientName = "Client name is required";
@@ -28,6 +34,37 @@ export default function Step1ProjectInfo() {
     if (validate()) {
       setProjectInfo(form);
       setCurrentStep(2);
+    }
+  };
+
+  const handleGenerateDescription = async () => {
+    if (!notes.trim()) return;
+    setGenerating(true);
+    setGenError("");
+    try {
+      const res = await fetch("/api/describe-project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          notes,
+          clientName: form.clientName,
+          address: [form.projectAddress, form.city, form.province].filter(Boolean).join(", "),
+          constructionCost: form.constructionCost,
+          area: form.area,
+        }),
+      });
+      const data = await res.json();
+      if (data.description) {
+        setForm(f => ({ ...f, description: data.description }));
+        if (errors.description) setErrors(er => ({ ...er, description: undefined }));
+        setShowNotes(false);
+      } else {
+        setGenError("Could not generate description. Try again or write it manually.");
+      }
+    } catch {
+      setGenError("Something went wrong. Try again or write it manually.");
+    } finally {
+      setGenerating(false);
     }
   };
 
@@ -93,12 +130,10 @@ export default function Step1ProjectInfo() {
             )}
           </div>
 
-          {/* City + Province/State */}
+          {/* City + Province */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">
-                City
-              </label>
+              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">City</label>
               <input
                 type="text"
                 placeholder="e.g. West Vancouver"
@@ -107,14 +142,10 @@ export default function Step1ProjectInfo() {
                   errors.city ? "border-red-400" : "border-[#E8E8E8]"
                 }`}
               />
-              {errors.city && (
-                <p className="text-red-500 text-xs mt-1">{errors.city}</p>
-              )}
+              {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">
-                Province / State
-              </label>
+              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">Province / State</label>
               <input
                 type="text"
                 placeholder="e.g. BC"
@@ -130,9 +161,7 @@ export default function Step1ProjectInfo() {
               Estimated Construction Cost (CAD)
             </label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">
-                $
-              </span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
               <input
                 type="number"
                 min="0"
@@ -140,9 +169,8 @@ export default function Step1ProjectInfo() {
                 placeholder="1,500,000"
                 value={form.constructionCost || ""}
                 onChange={(e) => {
-                  setForm((f) => ({ ...f, constructionCost: Number(e.target.value) }));
-                  if (errors.constructionCost)
-                    setErrors((er) => ({ ...er, constructionCost: undefined }));
+                  setForm(f => ({ ...f, constructionCost: Number(e.target.value) }));
+                  if (errors.constructionCost) setErrors(er => ({ ...er, constructionCost: undefined }));
                 }}
                 className={`w-full pl-8 pr-4 py-3 rounded-lg border text-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition ${
                   errors.constructionCost ? "border-red-400" : "border-[#E8E8E8]"
@@ -154,69 +182,108 @@ export default function Step1ProjectInfo() {
             )}
           </div>
 
-          {/* Area and Floors side by side */}
+          {/* Area + Floors */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">
-                Approximate Area (sq ft)
-              </label>
+              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">Approximate Area (sq ft)</label>
               <input
-                type="number"
-                min="0"
-                placeholder="4,500"
+                type="number" min="0" placeholder="4,500"
                 value={form.area || ""}
                 onChange={(e) => {
-                  setForm((f) => ({ ...f, area: Number(e.target.value) }));
-                  if (errors.area) setErrors((er) => ({ ...er, area: undefined }));
+                  setForm(f => ({ ...f, area: Number(e.target.value) }));
+                  if (errors.area) setErrors(er => ({ ...er, area: undefined }));
                 }}
                 className={`w-full px-4 py-3 rounded-lg border text-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition ${
                   errors.area ? "border-red-400" : "border-[#E8E8E8]"
                 }`}
               />
-              {errors.area && (
-                <p className="text-red-500 text-xs mt-1">{errors.area}</p>
-              )}
+              {errors.area && <p className="text-red-500 text-xs mt-1">{errors.area}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">
-                Number of Floors
-              </label>
+              <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">Number of Floors</label>
               <input
-                type="number"
-                min="1"
-                max="10"
-                placeholder="2"
+                type="number" min="1" max="10" placeholder="2"
                 value={form.floors || ""}
                 onChange={(e) => {
-                  setForm((f) => ({ ...f, floors: Number(e.target.value) }));
-                  if (errors.floors) setErrors((er) => ({ ...er, floors: undefined }));
+                  setForm(f => ({ ...f, floors: Number(e.target.value) }));
+                  if (errors.floors) setErrors(er => ({ ...er, floors: undefined }));
                 }}
                 className={`w-full px-4 py-3 rounded-lg border text-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition ${
                   errors.floors ? "border-red-400" : "border-[#E8E8E8]"
                 }`}
               />
-              {errors.floors && (
-                <p className="text-red-500 text-xs mt-1">{errors.floors}</p>
-              )}
+              {errors.floors && <p className="text-red-500 text-xs mt-1">{errors.floors}</p>}
             </div>
           </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-semibold text-[#1A1A2E] mb-1.5">
-              Project Description
-            </label>
-            <p className="text-gray-400 text-xs mb-2">
-              This will appear on the proposal cover and scope section
+          {/* Description + AI notes */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-semibold text-[#1A1A2E]">
+                Project Description
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowNotes(!showNotes)}
+                className="text-xs text-[#0066cc] hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                {showNotes ? "Hide notes" : "Generate with AI from meeting notes"}
+              </button>
+            </div>
+
+            {/* AI notes panel */}
+            {showNotes && (
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3">
+                <p className="text-xs text-blue-700 font-semibold">
+                  Paste meeting notes, emails, or any context about this project — AI will write the description for you.
+                </p>
+                <textarea
+                  rows={5}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="e.g. Met with John and Sarah on Tuesday. They want a 4-bed custom home with an open-plan main floor, large kitchen island, and a covered outdoor deck. Budget is around $2M. They mentioned wanting a West Coast modern feel with lots of natural wood and big windows facing the mountains. Also asked about a home office..."
+                  className="w-full px-3 py-2.5 text-sm border border-blue-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0066cc] resize-none placeholder-gray-400"
+                />
+                {genError && <p className="text-xs text-red-500">{genError}</p>}
+                <button
+                  type="button"
+                  onClick={handleGenerateDescription}
+                  disabled={!notes.trim() || generating}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#0066cc] text-white text-xs font-semibold rounded-lg hover:bg-[#0052cc] disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                >
+                  {generating ? (
+                    <>
+                      <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                      </svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                      </svg>
+                      Generate Description →
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
+            <p className="text-gray-400 text-xs">
+              This appears on the proposal cover and scope section
             </p>
             <textarea
               rows={4}
               placeholder="e.g. New custom single-family home with 4 bedrooms, open-concept main floor, and a detached garage. The design emphasizes natural light and blends contemporary West Coast architecture with sustainable materials."
               value={form.description}
               onChange={(e) => {
-                setForm((f) => ({ ...f, description: e.target.value }));
-                if (errors.description)
-                  setErrors((er) => ({ ...er, description: undefined }));
+                setForm(f => ({ ...f, description: e.target.value }));
+                if (errors.description) setErrors(er => ({ ...er, description: undefined }));
               }}
               className={`w-full px-4 py-3 rounded-lg border text-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition resize-none ${
                 errors.description ? "border-red-400" : "border-[#E8E8E8]"

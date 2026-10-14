@@ -35,7 +35,7 @@ Please assess this fee proposal in exactly 3 sentences:
 Be direct and professional. Reference the specific market when relevant. Avoid generic advice.`;
 
     const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-5-5",
       max_tokens: 300,
       messages: [{ role: "user", content: prompt }],
     });

@@ -166,8 +166,33 @@ export const DEFAULT_PROFESSIONALS: Professional[] = [
 
 export const OVERHEAD_RATE = 0.45; // 45% overhead on labor
 
+// ─── Firm / team types (shared between store, firmConfig, and proposal doc) ───
+
+export interface TeamMember {
+  name: string;
+  title: string;
+  credentials: string;
+  bio: string;
+  photo: string; // URL or base64 data URI
+}
+
+export interface PortfolioProject {
+  name: string;
+  location: string;
+  year: string;
+  type: string;
+  photo: string; // URL or base64 data URI
+}
+
 export interface ProposalData {
   projectInfo: ProjectInfo;
   scopeData: ScopeData;
   feeData: FeeData | null;
+  firmName?: string;
+  firmDescription?: string;
+  teamMembers?: TeamMember[];
+  portfolioProjects?: PortfolioProject[];
+  includeTeam?: boolean;
+  includeFirmDescription?: boolean;
+  includePortfolio?: boolean;
 }

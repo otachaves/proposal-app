@@ -1,6 +1,9 @@
 "use client";
 
 import { useApp } from "./store";
+import LandingPage from "./components/LandingPage";
+import AuthModal from "./components/AuthModal";
+import FirmSetupPage from "./components/FirmSetupPage";
 import ProgressBar from "./components/ProgressBar";
 import Step1ProjectInfo from "./components/Step1ProjectInfo";
 import Step2Scope from "./components/Step2Scope";
@@ -8,11 +11,23 @@ import Step3Fee from "./components/Step3Fee";
 import Step4Output from "./components/Step4Output";
 
 export default function Home() {
-  const { currentStep } = useApp();
+  const { isLoggedIn, showAuthModal, setShowAuthModal, firmSetupDone, userEmail, logout, currentStep } = useApp();
+
+  if (!isLoggedIn) {
+    return (
+      <>
+        <LandingPage />
+        {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      </>
+    );
+  }
+
+  if (!firmSetupDone) {
+    return <FirmSetupPage />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Top brand bar */}
       <div className="bg-[#0A1628] text-white py-3 px-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -29,7 +44,18 @@ export default function Home() {
               <p className="text-[#C9A84C] text-xs">Architect · Vancouver, BC</p>
             </div>
           </div>
-          <p className="text-gray-400 text-xs hidden sm:block">Fee Proposal Generator</p>
+          <div className="flex items-center gap-4">
+            <p className="text-gray-400 text-xs hidden sm:block">Fee Proposal Generator</p>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <span className="hidden sm:inline">{userEmail}</span>
+              <button
+                onClick={logout}
+                className="text-gray-400 hover:text-white border border-gray-600 hover:border-gray-400 px-2.5 py-1 rounded transition-colors cursor-pointer"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

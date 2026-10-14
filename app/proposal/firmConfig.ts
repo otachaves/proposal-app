@@ -1,52 +1,41 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// FIRM CONFIGURATION
-// Edit this file to update team members, portfolio projects, and firm details.
+// FIRM CONFIGURATION — default values. Editable at runtime via Step 4.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export interface TeamMember {
-  name: string;
-  title: string;
-  credentials: string;
-  bio: string;
-  photo: string;
-}
+import type { TeamMember, PortfolioProject } from "../types";
+export type { TeamMember, PortfolioProject };
 
-export interface PortfolioProject {
-  name: string;
-  location: string;
-  year: string;
-  type: string;
-  photo: string;
-}
+export const DEFAULT_FIRM_DESCRIPTION =
+  "We are a boutique architectural practice dedicated to delivering thoughtful, high-quality residential design. Every project is led by a principal architect from concept to completion, ensuring a seamless experience and a result that truly reflects each client's vision.";
 
 export const TEAM_MEMBERS: TeamMember[] = [
   {
-    name: "Otávio Chaves",
+    name: "Brian Mitchell",
     title: "Principal Architect",
-    credentials: "M.Arch, AIBC",
-    bio: "Over 15 years of experience in high-end residential design across Vancouver and the Lower Mainland. Passionate about spaces that connect people to their environment.",
-    photo: "https://s12arquitetura.com.br/static/4a7e18dfebd001593093605a0985a908/d0ea7/otavio-chaves.jpg",
+    credentials: "M.Arch, AIA",
+    bio: "Over 15 years of experience in high-end residential design across the Pacific Northwest. Passionate about creating spaces that connect people to their environment.",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=face",
   },
   {
-    name: "Carolina Bailune",
+    name: "Sarah Chen",
     title: "Associate Architect",
-    credentials: "M.Arch, AIBC",
+    credentials: "M.Arch, LEED AP",
     bio: "Specialist in sustainable design and building performance. Leads technical coordination and construction documentation across all projects.",
-    photo: "https://s12arquitetura.com.br/static/f197974754bf7e5c724d8c7efd13154a/d0ea7/carolina-bailune.jpg",
+    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop&crop=face",
   },
   {
-    name: "Lívia Bragança",
+    name: "John Harrington",
     title: "Design Lead",
     credentials: "M.Arch",
     bio: "Brings a strong conceptual vision to each project with expertise in 3D visualization, interior architecture, and material selection.",
-    photo: "https://s12arquitetura.com.br/static/97f8d81eb1dd48e7565e4abc92e172b9/d0ea7/livia-braganca.jpg",
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=500&fit=crop&crop=face",
   },
   {
-    name: "Marcos Balli",
+    name: "Emily Ward",
     title: "Project Manager",
     credentials: "B.Arch, PMP",
     bio: "Oversees project delivery, client communications, and contractor coordination to ensure every project is completed on time and within budget.",
-    photo: "https://s12arquitetura.com.br/static/1d8bd929bcc559d96afda977537ccad0/d0ea7/marcos-balli.jpg",
+    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=500&fit=crop&crop=face",
   },
 ];
 
