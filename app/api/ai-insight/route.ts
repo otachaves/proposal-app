@@ -27,12 +27,12 @@ ${servicesText}
 
 Market benchmark: 8–15% for residential new construction in Canada. Fees in high-cost markets like Greater Vancouver, Victoria, and Toronto typically run 10–14% due to regulatory complexity and land costs.
 
-Please assess this fee proposal in exactly 3 sentences:
-1. Whether the fee percentage is competitive, low, or high vs. the local ${location} market and the North American benchmark
-2. Whether the profit margin appears at risk given typical overhead and labour costs in ${location}
-3. One specific, actionable adjustment suggestion if needed (or confirm it looks strong)
+Assess this fee proposal as exactly 3 bullet points, one per line, each starting with "- " and no longer than 20 words:
+- Market position: is the fee competitive, low, or high vs. ${location} and the North American benchmark?
+- Margin risk: is profit at risk given typical overhead and labour costs in ${location}?
+- Recommendation: one specific adjustment (or confirm it looks strong)
 
-Be direct and professional. Reference the specific market when relevant. Avoid generic advice.`;
+Start each bullet with its label ("Market position:", "Margin risk:", "Recommendation:"). Be direct and specific to the market. No intro, no closing line, no extra detail.`;
 
     const message = await client.messages.create({
       model: "claude-sonnet-5-5",

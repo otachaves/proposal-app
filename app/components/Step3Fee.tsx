@@ -422,7 +422,31 @@ export default function Step3Fee() {
 
           {fee.aiInsight && !aiLoading && (
             <div className="bg-[#0A1628]/5 border border-[#C9A84C]/30 rounded-xl p-5">
-              <p className="text-sm text-[#1A1A2E] leading-relaxed">{fee.aiInsight}</p>
+              <ul className="space-y-3">
+                {fee.aiInsight
+                  .split("\n")
+                  .map((line) => line.replace(/^\s*(?:[-•*]|\d+\.)\s*/, "").trim())
+                  .filter(Boolean)
+                  .map((line, i) => {
+                    const [label, ...rest] = line.split(":");
+                    const hasLabel = rest.length > 0 && label.length <= 20;
+                    return (
+                      <li key={i} className="flex gap-3 text-sm text-[#1A1A2E] leading-relaxed">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#C9A84C]" />
+                        <span>
+                          {hasLabel ? (
+                            <>
+                              <strong className="font-semibold">{label}:</strong>
+                              {rest.join(":")}
+                            </>
+                          ) : (
+                            line
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
+              </ul>
             </div>
           )}
 
