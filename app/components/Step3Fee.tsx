@@ -424,7 +424,8 @@ export default function Step3Fee() {
             <div className="bg-[#0A1628]/5 border border-[#C9A84C]/30 rounded-xl p-5">
               <ul className="space-y-3">
                 {fee.aiInsight
-                  .split("\n")
+                  // Split on newlines, and on inline " - " / " 2. " markers in case bullets arrive on one line
+                  .split(/\n|\s+-\s+(?=[A-Z])|\s+(?=\d\.\s)/)
                   .map((line) => line.replace(/^\s*(?:[-•*]|\d+\.)\s*/, "").trim())
                   .filter(Boolean)
                   .map((line, i) => {
