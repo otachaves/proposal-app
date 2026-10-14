@@ -335,21 +335,21 @@ export default function LandingPage() {
               We&apos;ll guide you to build it.
             </h2>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Or customize this one to fit how you actually work. Archipelago works with AEC firms to design, build, and deploy AI tools scoped to your workflows. No dev team required.
+              Or customize this one to fit how you actually work. SMAC works with AEC firms to design, build, and deploy AI tools scoped to your workflows. No dev team required.
             </p>
             <div className="pt-2">
               <button
                 onClick={() => alert("Thank you for your interest! In this showcase sandbox, please sign in with any email to test the complete proposal app.")}
                 className="px-6 py-3.5 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-100 text-sm tracking-wide text-center inline-flex items-center gap-1.5 transition-all shadow-lg cursor-pointer"
               >
-                Talk to Archipelago →
+                Talk to SMAC →
               </button>
             </div>
           </div>
         </div>
 
         <div className="max-w-5xl mx-auto border-t border-slate-800 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4 select-none">
-          <span>© 2026 Archipelago Showcase. All rights reserved.</span>
+          <span>© 2026 SMAC Showcase. All rights reserved.</span>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white transition-colors">Privacy Settings</a>
             <a href="#" className="hover:text-white transition-colors">AEC Terms of Service</a>

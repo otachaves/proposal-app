@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
           </div>
 
           <p style="color: #94a3b8; font-size: 11px; text-align: center; margin-top: 20px;">
-            Sent automatically by Proposal App · Archipelago
+            Sent automatically by Proposal App · SMAC
           </p>
         </div>
       `,

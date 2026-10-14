@@ -123,7 +123,7 @@ function DocuSignModal({ onClose }: { onClose: () => void }) {
           <div className="text-center space-y-2">
             <h3 className="text-lg font-bold text-[#0A1628]">This is a demo</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              To enable real e-signatures, personalize this project and connect it to your DocuSign account. Archipelago can configure this integration for your firm.
+              To enable real e-signatures, personalize this project and connect it to your DocuSign account. SMAC can configure this integration for your firm.
             </p>
           </div>
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-[#0A1628] space-y-2">
